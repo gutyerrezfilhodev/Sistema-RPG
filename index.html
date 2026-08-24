@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Initiate Tracker</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #1e1e26;
+    color: #eee;
+    margin: 0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 { margin-bottom: 4px; }
+  .subtitle { color: #888; font-size: 13px; margin-bottom: 8px; }
+  .round-info { color: #aaa; margin-bottom: 20px; }
+
+  .add-form {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 24px;
+    background: #2a2a35;
+    padding: 16px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .add-form input {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #1e1e26;
+    color: #eee;
+    font-size: 14px;
+  }
+  #name-input { flex: 2; min-width: 120px; }
+  #init-input, #hp-input { flex: 1; min-width: 70px; }
+  button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background: #5b5bd6;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  button:hover { background: #4747b8; }
+  button.danger { background: #b8393f; }
+  button.danger:hover { background: #952e33; }
+  button.secondary { background: #3a3a48; }
+  button.secondary:hover { background: #4a4a5a; }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  ul#list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  li.card {
+    background: #2a2a35;
+    border: 1px solid #3a3a48;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.15s;
+  }
+  li.card.active {
+    border-color: #5b5bd6;
+    background: #33334a;
+    box-shadow: 0 0 0 2px #5b5bd6 inset;
+  }
+  .init-badge {
+    background: #1e1e26;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-weight: bold;
+    min-width: 34px;
+    text-align: center;
+  }
+  .name {
+    flex: 1;
+    font-weight: 600;
+  }
+  .hp-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hp-controls input {
+    width: 55px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #1e1e26;
+    color: #eee;
+  }
+  .hp-btn {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    line-height: 1;
+    border-radius: 50%;
+  }
+  .remove-btn {
+    background: transparent;
+    color: #b8393f;
+    font-size: 18px;
+    padding: 2px 8px;
+  }
+  .remove-btn:hover { background: #3a3a48; }
+  .empty {
+    color: #888;
+    text-align: center;
+    padding: 30px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Initiate Tracker</h1>
+<div class="subtitle">Alador &amp; Wardarius ltda</div>
+<div class="round-info">Rodada <span id="round-num">1</span></div>
+
+<div class="add-form">
+  <input id="name-input" type="text" placeholder="Nome" />
+  <input id="init-input" type="number" placeholder="Iniciativa" />
+  <input id="hp-input" type="number" placeholder="PV" />
+  <button onclick="addCombatant()">Adicionar</button>
+</div>
+
+<div class="controls">
+  <button onclick="nextTurn()">Próximo turno →</button>
+  <button class="secondary" onclick="sortList()">Reordenar</button>
+  <button class="danger" onclick="clearAll()">Limpar tudo</button>
+</div>
+
+<ul id="list"></ul>
+
+<script>
+let combatants = [];
+let currentIndex = 0;
+let round = 1;
+
+function addCombatant() {
+  const nameEl = document.getElementById('name-input');
+  const initEl = document.getElementById('init-input');
+  const hpEl = document.getElementById('hp-input');
+
+  const name = nameEl.value.trim();
+  const init = parseInt(initEl.value);
+  const hp = parseInt(hpEl.value);
+
+  if (!name || isNaN(init)) return;
+
+  combatants.push({
+    name,
+    init,
+    hp: isNaN(hp) ? null : hp,
+    maxHp: isNaN(hp) ? null : hp
+  });
+
+  nameEl.value = '';
+  initEl.value = '';
+  hpEl.value = '';
+  nameEl.focus();
+
+  sortList();
+}
+
+function sortList() {
+  const activeName = combatants[currentIndex] ? combatants[currentIndex].name : null;
+  combatants.sort((a, b) => b.init - a.init);
+  if (activeName) {
+    const newIndex = combatants.findIndex(c => c.name === activeName);
+    currentIndex = newIndex === -1 ? 0 : newIndex;
+  }
+  render();
+}
+
+function nextTurn() {
+  if (combatants.length === 0) return;
+  currentIndex++;
+  if (currentIndex >= combatants.length) {
+    currentIndex = 0;
+    round++;
+    document.getElementById('round-num').textContent = round;
+  }
+  render();
+}
+
+function removeCombatant(index) {
+  combatants.splice(index, 1);
+  if (currentIndex >= combatants.length) currentIndex = 0;
+  render();
+}
+
+function changeHp(index, delta) {
+  const c = combatants[index];
+  if (c.hp === null) c.hp = 0;
+  c.hp += delta;
+  render();
+}
+
+function setHp(index, value) {
+  const v = parseInt(value);
+  combatants[index].hp = isNaN(v) ? null : v;
+}
+
+function clearAll() {
+  if (combatants.length && !confirm('Remover todos os combatentes?')) return;
+  combatants = [];
+  currentIndex = 0;
+  round = 1;
+  document.getElementById('round-num').textContent = round;
+  render();
+}
+
+function render() {
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+
+  if (combatants.length === 0) {
+    list.innerHTML = '<div class="empty">Nenhum combatente adicionado ainda.</div>';
+    return;
+  }
+
+  combatants.forEach((c, i) => {
+    const li = document.createElement('li');
+    li.className = 'card' + (i === currentIndex ? ' active' : '');
+
+    li.innerHTML = `
+      <div class="init-badge">${c.init}</div>
+      <div class="name">${c.name}</div>
+      <div class="hp-controls">
+        <button class="hp-btn" onclick="changeHp(${i}, -1)">−</button>
+        <input type="number" value="${c.hp === null ? '' : c.hp}" placeholder="PV" onchange="setHp(${i}, this.value)" />
+        <button class="hp-btn" onclick="changeHp(${i}, 1)">+</button>
+      </div>
+      <button class="remove-btn" onclick="removeCombatant(${i})">✕</button>
+    `;
+    list.appendChild(li);
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
+
