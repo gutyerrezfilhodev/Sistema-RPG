@@ -69,15 +69,10 @@
             background-color: #431313;
         }
 
-        /* Ocultar elementos */
-        .hidden {
-            display: none !important;
-        }
-
         /* Ficha de Personagem */
         .sheet-container {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 20px auto;
             background: var(--card-bg);
             border: 4px solid var(--primary-color);
             padding: 20px;
@@ -271,11 +266,6 @@
             font-size: 0.8rem;
             float: right;
         }
-
-        .btn-voltar {
-            margin-bottom: 15px;
-            background-color: var(--secondary-color);
-        }
     </style>
 </head>
 <body>
@@ -288,9 +278,8 @@
         </div>
     </div>
 
-    <!-- FICHA DE PERSONAGEM (Página de Navegação) -->
-    <div id="sheet-screen" class="sheet-container hidden">
-        <button class="btn-voltar" onclick="voltarInicio()">← Voltar ao Início</button>
+    <!-- FICHA DE PERSONAGEM (Separada da tela inicial) -->
+    <div class="sheet-container">
         <h1>Ficha de Personagem - D&D 5e</h1>
 
         <div class="header-section">
@@ -395,15 +384,9 @@
     </div>
 
 <script>
-    // Controle de navegação entre telas
+    // Função do botão Iniciar Campanha (livre para customização futura)
     function iniciarCampanha() {
-        document.getElementById('welcome-screen').classList.add('hidden');
-        document.getElementById('sheet-screen').classList.remove('hidden');
-    }
-
-    function voltarInicio() {
-        document.getElementById('sheet-screen').classList.add('hidden');
-        document.getElementById('welcome-screen').classList.remove('hidden');
+        alert("Campanha iniciada! (Aqui você pode adicionar a lógica que preferir para este botão)");
     }
 
     // Funções da Ficha
