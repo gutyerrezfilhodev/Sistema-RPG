@@ -266,33 +266,33 @@
     <div class="attributes-grid">
         <div class="attribute-box">
             <label>FORÇA</label>
-            <input type="number" class="score" value="10" oninput="calcularModificador(this)">
-            <div class="mod-box">+0</div>
+            <input type="number" class="score" oninput="calcularModificador(this)">
+            <div class="mod-box">--</div>
         </div>
         <div class="attribute-box">
             <label>DESTREZA</label>
-            <input type="number" class="score" value="10" oninput="calcularModificador(this)">
-            <div class="mod-box">+0</div>
+            <input type="number" class="score" oninput="calcularModificador(this)">
+            <div class="mod-box">--</div>
         </div>
         <div class="attribute-box">
             <label>CONSTITUIÇÃO</label>
-            <input type="number" class="score" value="10" oninput="calcularModificador(this)">
-            <div class="mod-box">+0</div>
+            <input type="number" class="score" oninput="calcularModificador(this)">
+            <div class="mod-box">--</div>
         </div>
         <div class="attribute-box">
             <label>INTELIGÊNCIA</label>
-            <input type="number" class="score" value="10" oninput="calcularModificador(this)">
-            <div class="mod-box">+0</div>
+            <input type="number" class="score" oninput="calcularModificador(this)">
+            <div class="mod-box">--</div>
         </div>
         <div class="attribute-box">
             <label>SABEDORIA</label>
-            <input type="number" class="score" value="10" oninput="calcularModificador(this)">
-            <div class="mod-box">+0</div>
+            <input type="number" class="score" oninput="calcularModificador(this)">
+            <div class="mod-box">--</div>
         </div>
         <div class="attribute-box">
             <label>CARISMA</label>
-            <input type="number" class="score" value="10" oninput="calcularModificador(this)">
-            <div class="mod-box">+0</div>
+            <input type="number" class="score" oninput="calcularModificador(this)">
+            <div class="mod-box">--</div>
         </div>
     </div>
 
@@ -300,15 +300,15 @@
     <div class="combat-grid">
         <div class="combat-box">
             <label style="font-weight:bold; color:var(--primary-color);">Classe de Armadura (CA)</label>
-            <input type="number" value="10" style="width: 60px; text-align: center; font-size: 1.2rem; margin-top:5px;">
+            <input type="number" style="width: 60px; text-align: center; font-size: 1.2rem; margin-top:5px;">
         </div>
         <div class="combat-box">
             <label style="font-weight:bold; color:var(--primary-color);">Iniciativa</label>
-            <input type="number" value="0" style="width: 60px; text-align: center; font-size: 1.2rem; margin-top:5px;">
+            <input type="number" style="width: 60px; text-align: center; font-size: 1.2rem; margin-top:5px;">
         </div>
         <div class="combat-box">
             <label style="font-weight:bold; color:var(--primary-color);">Deslocamento</label>
-            <input type="text" value="9m" style="width: 60px; text-align: center; font-size: 1.2rem; margin-top:5px;">
+            <input type="text" style="width: 60px; text-align: center; font-size: 1.2rem; margin-top:5px;">
         </div>
     </div>
 
@@ -343,9 +343,21 @@
     }
 
     function calcularModificador(inputElement) {
-        const score = parseInt(inputElement.value) || 10;
-        const mod = Math.floor((score - 10) / 2);
         const modBox = inputElement.parentElement.querySelector('.mod-box');
+        const val = inputElement.value.trim();
+        
+        if (val === '') {
+            modBox.textContent = '--';
+            return;
+        }
+
+        const score = parseInt(val);
+        if (isNaN(score)) {
+            modBox.textContent = '--';
+            return;
+        }
+
+        const mod = Math.floor((score - 10) / 2);
         modBox.textContent = (mod >= 0 ? '+' : '') + mod;
     }
 
