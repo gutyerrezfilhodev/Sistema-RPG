@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universo de Fantasia</title>
+    <title>Painel da Campanha</title>
     <style>
         :root {
             --primary-color: #5c1d1d;
             --secondary-color: #2c2c2c;
             --bg-color: #f4f1ea;
+            --card-bg: #fff;
             --border-color: #bfa15f;
         }
 
@@ -18,71 +19,155 @@
             color: var(--secondary-color);
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 95vh;
         }
 
-        .welcome-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
-            border: 4px solid var(--primary-color);
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        .dashboard-container {
             max-width: 900px;
             margin: 0 auto;
-        }
-
-        .welcome-content {
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--card-bg);
+            border: 4px solid var(--primary-color);
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 8px;
-            border: 2px solid var(--border-color);
-            max-width: 600px;
+            min-height: 80vh;
         }
 
-        .welcome-content h1 {
-            color: var(--primary-color);
-            font-size: 2.5rem;
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
             margin-bottom: 20px;
         }
 
-        .btn-start {
-            background-color: var(--primary-color);
+        .nav-header h2 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .btn-voltar {
+            background-color: var(--secondary-color);
             color: white;
             border: none;
-            padding: 12px 25px;
-            font-size: 1.2rem;
+            padding: 8px 15px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.3s;
             text-decoration: none;
-            display: inline-block;
+            font-size: 0.9rem;
         }
 
-        .btn-start:hover {
-            background-color: #431313;
+        .btn-voltar:hover {
+            background-color: #1a1a1a;
+        }
+
+        /* Abas de Navegação */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background-color: #e9e5dc;
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: #dcd6cb;
+        }
+
+        /* Conteúdo das Abas */
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background: #fdfbf7;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            min-height: 300px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content h3 {
+            color: var(--primary-color);
+            margin-top: 0;
         }
     </style>
 </head>
 <body>
 
-    <div class="welcome-container">
-        <div class="welcome-content">
-            <h1>Bem Vindo a um Universo de Fantasia</h1>
-            <!-- O botão agora é um link direto para a página de navegação -->
-            <a href="dashboard.html" class="btn-start">Iniciar Campanha</a>
+    <div class="dashboard-container">
+        <div class="nav-header">
+            <h2>Painel da Campanha</h2>
+            <a href="index.html" class="btn-voltar">← Voltar ao Início</a>
+        </div>
+
+        <!-- Botões das Abas -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="mudarAba(event, 'personagens')">Personagens</button>
+            <button class="tab-btn" onclick="mudarAba(event, 'inimigos')">Inimigos</button>
+            <button class="tab-btn" onclick="mudarAba(event, 'itens')">Itens</button>
+            <button class="tab-btn" onclick="mudarAba(event, 'cenario')">Cenário</button>
+        </div>
+
+        <!-- Conteúdo: Personagens -->
+        <div id="personagens" class="tab-content active">
+            <h3>Personagens</h3>
+            <p>Gerencie os personagens da campanha aqui...</p>
+        </div>
+
+        <!-- Conteúdo: Inimigos -->
+        <div id="inimigos" class="tab-content">
+            <h3>Inimigos</h3>
+            <p>Gerencie as criaturas e vilões aqui...</p>
+        </div>
+
+        <!-- Conteúdo: Itens -->
+        <div id="itens" class="tab-content">
+            <h3>Itens</h3>
+            <p>Gerencie os equipamentos, artefatos e tesouros aqui...</p>
+        </div>
+
+        <!-- Conteúdo: Cenário -->
+        <div id="cenario" class="tab-content">
+            <h3>Cenário</h3>
+            <p>Gerencie as localizações, mapas e história do mundo aqui...</p>
         </div>
     </div>
+
+    <script>
+        function mudarAba(event, abaId) {
+            // Esconde todo o conteúdo das abas
+            const conteudos = document.querySelectorAll('.tab-content');
+            conteudos.forEach(conteudo => conteudo.classList.remove('active'));
+
+            // Remove a classe active de todos os botões
+            const botoes = document.querySelectorAll('.tab-btn');
+            botoes.forEach(botao => botao.classList.remove('active'));
+
+            // Mostra a aba clicada e ativa o botão correspondente
+            document.getElementById(abaId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
 
 </body>
 </html>
