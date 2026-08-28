@@ -237,27 +237,27 @@
         <div class="header-fields">
             <div class="field-group">
                 <label>Nome do Personagem</label>
-                <input type="text" placeholder="Ex: Thorin Escudo de Ferro">
+                <input type="text">
             </div>
             <div class="field-group">
                 <label>Classe e Nível</label>
-                <input type="text" placeholder="Ex: Guerreiro 3">
+                <input type="text">
             </div>
             <div class="field-group">
                 <label>Antecedente</label>
-                <input type="text" placeholder="Ex: Soldado">
+                <input type="text">
             </div>
             <div class="field-group">
                 <label>Nome do Jogador</label>
-                <input type="text" placeholder="Seu Nome">
+                <input type="text">
             </div>
             <div class="field-group">
                 <label>Raça</label>
-                <input type="text" placeholder="Ex: Anão da Montanha">
+                <input type="text">
             </div>
             <div class="field-group">
                 <label>Tendência</label>
-                <input type="text" placeholder="Ex: Leal e Neutro">
+                <input type="text">
             </div>
         </div>
     </div>
@@ -331,7 +331,6 @@
 </div>
 
 <script>
-    // Função para carregar imagem de perfil
     function carregarImagem(event, previewId, textId) {
         const reader = new FileReader();
         reader.onload = function() {
@@ -343,7 +342,6 @@
         reader.readAsDataURL(event.target.files[0]);
     }
 
-    // Função para calcular automaticamente os modificadores de D&D
     function calcularModificador(inputElement) {
         const score = parseInt(inputElement.value) || 10;
         const mod = Math.floor((score - 10) / 2);
@@ -351,7 +349,6 @@
         modBox.textContent = (mod >= 0 ? '+' : '') + mod;
     }
 
-    // Função para carregar imagem específica de um item do inventário
     function carregarImagemItem(event, inputElement) {
         const reader = new FileReader();
         const container = inputElement.parentElement;
@@ -369,7 +366,6 @@
         reader.readAsDataURL(event.target.files[0]);
     }
 
-    // Função para adicionar dinamicamente novos itens ao inventário
     function adicionarItem() {
         const container = document.getElementById('inventory-container');
         const itemCard = document.createElement('div');
@@ -386,7 +382,6 @@
         container.appendChild(itemCard);
     }
 
-    // Função para remover um item do inventário
     function removerItem(button) {
         button.parentElement.remove();
     }
